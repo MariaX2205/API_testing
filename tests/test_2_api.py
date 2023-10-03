@@ -41,7 +41,6 @@ def test_single_user():
 
 
 def test_create():
-
     res = api.create("Boris", "Coach")
 
     assert res.status_code == HTTPStatus.CREATED
@@ -50,4 +49,3 @@ def test_create():
     assert res.json()["job"] == "Coach"
 
     assert api.delete_user(res.json()['id']).status_code == HTTPStatus.NO_CONTENT
-

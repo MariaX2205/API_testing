@@ -53,5 +53,20 @@ class Api(Client):
         url = self.BASE_URL + self.USERS + F"/{id}"
         return self.delete(url)
 
+    def register_user(self, email: str, pw: str):
+        # method: POST
+        # routs: /
+        # body(email всегда такой как указан, пароль любой)
+
+        url = self.BASE_URL + "/register"
+        payload = json.dumps({
+            "email": F"{email}",
+            "password": F"{pw}"
+        })
+        headers = {
+            "Content-Type": "application/json"
+        }
+        return self.post(url, headers, payload)
+
 
 api = Api()
