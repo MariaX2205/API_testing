@@ -2,6 +2,7 @@ import requests
 from http import HTTPStatus
 from api.questions_api import api
 from utils.assertions import Assert
+import re
 
 
 def test_2_status():
@@ -41,11 +42,35 @@ def test_single_user():
 
 
 def test_create():
-    res = api.create("Boris", "Coach")
+    name = "Boris"
+    job = "tester"
+    res = api.create(name, job)
 
     assert res.status_code == HTTPStatus.CREATED
+    assert res.json()["name"] == name
+    assert re.fullmatch(r"\d{1,4}", res.json()["id"])
+    assert res.json()["job"] == job
 
-    assert res.json()["name"] == "Boris"
-    assert res.json()["job"] == "Coach"
+    schema = {
+        "type": "object",
+        "properties":
+            {
+                "name": {
+                    "type": "string"
+                },
+                "job":
+                    {
+                        "type": "string",
+                    },
+                "id": {
+                    "type": "string",
+                },
+                "createdAt": {
+                    "type": "string"
+                }
+            }
+    }
+
+    #Assert.validate_schema_custom(res.json(), schema)
 
     assert api.delete_user(res.json()['id']).status_code == HTTPStatus.NO_CONTENT

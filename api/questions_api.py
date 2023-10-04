@@ -1,5 +1,6 @@
 from api.client import Client
 import json
+import re
 
 
 class Api(Client):
@@ -12,6 +13,7 @@ class Api(Client):
         # status: 200
         url = self.BASE_URL + self.USERS + '?page=2'
         return self.get(url)
+        assert res.headers['Cache-Control'] == 'max-age=14400'
 
     def single_user_not_found(self):
         # :method: get
@@ -67,6 +69,11 @@ class Api(Client):
             "Content-Type": "application/json"
         }
         return self.post(url, headers, payload)
-
+    def robots_txt(self):
+        # mehod: get
+        # routs: /robots.txt
+        # status: 200
+        url = self.BASE_URL + self.ROBOTS
+        return self.get(url)
 
 api = Api()
